@@ -137,17 +137,16 @@ video#vidFondo {
   font-size: 1.3rem;
   color: #ffab40;
 }
-.card-action{
-  text-align: right;
-}
 .horizontal{
   display: flex;
   flex-flow: row wrap;
 }
 .card-image{
-  size:50%;
+ width: 50%;
 }
 .card-stacked{
-  background-color: red;
-  width: 50%;
+ width: 50%;
+}
+.card-action{
+ text-align: right;
 }
