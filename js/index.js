@@ -65,7 +65,9 @@ $('#formulario').submit((e)=>{
   e.preventDefault();
   filtro={
     "fromSlide":from,
-    "toSlide":to
+    "toSlide":to,
+    "city":$('#selectCiudad')[0].value,
+    "type":$('#selectTipo')[0].value
   }
   
   solicitud('index.php','POST',{action:'filtro',filtro},(data)=>{

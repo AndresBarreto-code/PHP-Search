@@ -54,7 +54,19 @@
         foreach($data as $clave => $valor){
             $precio=(double)str_replace(['$',','],'',$valor->Precio);
             if(($from <= $precio) && ($precio <= $to)){
-                $httmlTemplate.=templateCard($valor);
+                if(!$filtro["city"]){
+                    if(!$filtro["type"]){
+                        $httmlTemplate.=templateCard($valor);
+                    }elseif($filtro["type"]===$valor->Tipo){
+                        $httmlTemplate.=templateCard($valor);
+                    }
+                }elseif($filtro["city"]===$valor->Ciudad){
+                    if(!$filtro["type"]){
+                        $httmlTemplate.=templateCard($valor);
+                    }elseif($filtro["type"]===$valor->Tipo){
+                        $httmlTemplate.=templateCard($valor);
+                    }
+                }
             }
         }
         echo $httmlTemplate; 
