@@ -29,7 +29,7 @@ function inicializarSlider(){
 
 
 inicializarSlider();
-
+inicializarFiltros();
 
 
 $('.button').click((e)=>{
@@ -41,7 +41,7 @@ $('.button').click((e)=>{
       document.getElementById("contenido").innerHTML = data;
     },
     error: (error)=>{
-      console.log(`Error al enviar petición`);
+      console.log(`Error al enviar petición ${e.target.id}`);
       console.log(error);
     },
 
@@ -49,8 +49,21 @@ $('.button').click((e)=>{
 });
 
 
-function inicializarFiltro(){
-  
+function inicializarFiltros(){
+  $.ajax({
+    url: 'index.php',
+    type: 'POST',
+    data: {action:"initFiltros"},
+    success: (data)=>{
+      document.getElementById("selectCiudad").innerHTML += JSON.parse(data).ciudades;
+      document.getElementById("selectTipo").innerHTML += JSON.parse(data).tipos;
+    },
+    error: (error)=>{
+      console.log(`Error al enviar petición de inicializar filtros`);
+      console.log(error);
+    },
+
+  });      
 }
 
 $('#formulario').submit((e)=>{

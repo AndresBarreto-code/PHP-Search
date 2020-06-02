@@ -3,6 +3,9 @@
         case 'mostrarTodos':
             mostrarTodo();
         break;
+        case 'initFiltros':
+            initFiltros();
+        break;
         default:
             echo "otro";
         break;
@@ -17,6 +20,27 @@
         }
         echo $httmlTemplate; 
         fclose($file);
+    }
+    function initFiltros(){
+        $file = fopen("./data-1.json","r");
+        $data = json_decode(fread($file,filesize("./data-1.json")));
+        $jsonResponce = new stdClass;
+        $jsonResponce->ciudades= "";
+        $jsonResponce->tipos= "";
+        $ciudades=array();
+        $tipos=array();
+        foreach($data as $clave => $valor){
+            if(!in_array($valor->Ciudad,$ciudades)){
+                array_push($ciudades,$valor->Ciudad);
+                $jsonResponce->ciudades.=templateOption($valor,'Ciudad');
+            }
+            if(!in_array($valor->Tipo,$tipos)){
+                array_push($tipos,$valor->Tipo);
+                $jsonResponce->tipos.=templateOption($valor,'Tipo');
+            }
+        }
+        echo json_encode($jsonResponce);
+        fclose($file);  
     }
 
     function templateCard($valor){
@@ -52,6 +76,10 @@
             </div>
         </div>';
 
+    }
+    
+    function templateOption($valor,$Option){
+        return '<option value="'.$valor->$Option.'">'.$valor->$Option.'</option>';
     }
     
 
