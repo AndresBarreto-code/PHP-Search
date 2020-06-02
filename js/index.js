@@ -25,31 +25,11 @@ function inicializarSlider(){
     prefix: "$"
   });
 }
-/*
-  Función que reproduce el video de fondo al hacer scroll, y deteiene la reproducción al detener el scroll
-*/
-function playVideoOnScroll(){
-  var ultimoScroll = 0,
-      intervalRewind;
-  var video = document.getElementById('vidFondo');
-  $(window)
-    .scroll((event)=>{
-      var scrollActual = $(window).scrollTop();
-      if (scrollActual > ultimoScroll){
-       video.play();
-     } else {
-        //this.rewind(1.0, video, intervalRewind);
-        video.play();
-     }
-     ultimoScroll = scrollActual;
-    })
-    .scrollEnd(()=>{
-      video.pause();
-    }, 10)
-}
+
+
 
 inicializarSlider();
-playVideoOnScroll();
+
 
 
 $('.button').click((e)=>{
@@ -67,3 +47,12 @@ $('.button').click((e)=>{
 
   });  
 });
+
+
+function inicializarFiltro(){
+  
+}
+
+$('#formulario').submit((e)=>{
+  alert('ok');
+})

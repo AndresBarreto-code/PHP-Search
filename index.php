@@ -15,10 +15,10 @@
         foreach($data as $clave => $valor){
             $httmlTemplate.=templateCard($valor);
         }
-        
         echo $httmlTemplate; 
         fclose($file);
     }
+
     function templateCard($valor){
         return 
         '<div class="card horizontal">
