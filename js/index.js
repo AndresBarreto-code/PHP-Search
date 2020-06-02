@@ -13,7 +13,12 @@ $.fn.scrollEnd = function(callback, timeout) {
 /*
   Función que inicializa el elemento Slider
 */
-
+let from = 0;
+let to = 0;
+function saveResult(data) {
+  from = data.from;
+  to = data.to;
+};
 function inicializarSlider(){
   $("#rangoPrecio").ionRangeSlider({
     type: "double",
@@ -22,6 +27,10 @@ function inicializarSlider(){
     max: 100000,
     from: 200,
     to: 80000,
+    onStart: (dataSlider) => {
+      saveResult(dataSlider);
+    },
+    onChange: saveResult,
     prefix: "$"
   });
 }
@@ -33,39 +42,48 @@ inicializarFiltros();
 
 
 $('.button').click((e)=>{
-  $.ajax({
-    url: 'index.php',
-    type: 'POST',
-    data: {action:e.target.id},
-    success: (data)=>{
-      document.getElementById("contenido").innerHTML = data;
-    },
-    error: (error)=>{
-      console.log(`Error al enviar petición ${e.target.id}`);
-      console.log(error);
-    },
-
-  });  
+  solicitud('index.php','POST',{action:e.target.id},(data)=>{
+    document.getElementById("contenido").innerHTML = data;
+  },(error)=>{
+    console.log(`Error al enviar petición ${e.target.id}`);
+    console.log(error);
+  })  
 });
 
 
 function inicializarFiltros(){
-  $.ajax({
-    url: 'index.php',
-    type: 'POST',
-    data: {action:"initFiltros"},
-    success: (data)=>{
-      document.getElementById("selectCiudad").innerHTML += JSON.parse(data).ciudades;
-      document.getElementById("selectTipo").innerHTML += JSON.parse(data).tipos;
-    },
-    error: (error)=>{
-      console.log(`Error al enviar petición de inicializar filtros`);
-      console.log(error);
-    },
-
-  });      
+  solicitud('index.php','POST',{action:"initFiltros"},(data)=>{
+    document.getElementById("selectCiudad").innerHTML += JSON.parse(data).ciudades;
+    document.getElementById("selectTipo").innerHTML += JSON.parse(data).tipos;
+  },(error)=>{
+    console.log(`Error al enviar petición de inicializar filtros`);
+    console.log(error);
+  });
 }
 
 $('#formulario').submit((e)=>{
-  alert('ok');
+  e.preventDefault();
+  filtro={
+    "fromSlide":from,
+    "toSlide":to
+  }
+  
+  solicitud('index.php','POST',{action:'filtro',filtro},(data)=>{
+    document.getElementById("contenido").innerHTML = data;
+  },(error)=>{
+    console.log(`Error al enviar petición de filtros`);
+    console.log(error);
+  });
+  
 })
+
+
+function solicitud(url,type,data,success,error){
+  $.ajax({
+    url: url,
+    type: type,
+    data: data,
+    success: success,
+    error: error,
+   });  
+}

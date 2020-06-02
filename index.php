@@ -6,6 +6,9 @@
         case 'initFiltros':
             initFiltros();
         break;
+        case 'filtro':
+            filtro($_POST['filtro']);
+        break;
         default:
             echo "otro";
         break;
@@ -41,6 +44,21 @@
         }
         echo json_encode($jsonResponce);
         fclose($file);  
+    }
+    function filtro($filtro){
+        $from=(double)$filtro["fromSlide"];
+        $to=(double)$filtro["toSlide"];
+        $file = fopen("./data-1.json","r");
+        $data = json_decode(fread($file,filesize("./data-1.json")));
+        $httmlTemplate="";
+        foreach($data as $clave => $valor){
+            $precio=(double)str_replace(['$',','],'',$valor->Precio);
+            if(($from <= $precio) && ($precio <= $to)){
+                $httmlTemplate.=templateCard($valor);
+            }
+        }
+        echo $httmlTemplate; 
+        fclose($file);
     }
 
     function templateCard($valor){
